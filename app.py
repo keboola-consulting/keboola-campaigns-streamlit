@@ -105,16 +105,13 @@ def main():
         st.markdown("""
         1. **Generate or Use Existing Campaign Name:**
            - If you do not have an SF Campaign Name, use the Campaign Generator to create one
-           - Generate and copy this name into Salesforce to set up your campaign
-           - If you have questions contact: peter.perzo@keboola.com
+           - If you have questions contact: camila.monsalve@keboola.com
            
         2. **URL Generator with UTMs:**
            - Enter the destination link and UTM parameters
            - Click Generate URL to create the UTM link
            
-        3. Use Save Generated Values to store for future reference
-        
-        4. View and manage saved campaigns in the Stored Values section
+        3. Use Save Generated Values to store for reference. They are stored untill the page is refreshed. 
         
         **When to Use UTMs:**
         Use UTMs whenever you are linking from a non-webpage source (e.g., email, social media, etc.) 
