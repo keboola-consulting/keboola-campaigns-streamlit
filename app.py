@@ -218,23 +218,21 @@ def main():
     
     # Stored Values Section
     st.divider()
-    if st.checkbox("Show Stored Values"):
-        stored_values = load_stored_values()
-        if stored_values:
-            for idx, value in enumerate(stored_values):
-                with st.expander(f"Campaign {idx + 1}"):
-                    st.write("**Campaign Name:**")
-                    st.code(value['campaignName'])
-                    
-                    st.write("**Generated URL:**")
-                    st.code(value['url'])
-                    
-                    if st.button("🗑️ Remove", key=f"remove_{idx}"):
-                        stored_values.pop(idx)
-                        save_stored_values(stored_values)
-                        st.rerun()
-        else:
-            st.write("No stored values available.")
+    stored_values = load_stored_values()
+    if stored_values:
+        st.subheader("Stored Values")
+        for idx, value in enumerate(stored_values):
+            with st.expander(f"Campaign {idx + 1}", expanded=True):
+                st.write("**Campaign Name:**")
+                st.code(value['campaignName'])
+                
+                st.write("**Generated URL:**")
+                st.code(value['url'])
+                
+                if st.button("🗑️ Remove", key=f"remove_{idx}"):
+                    stored_values.pop(idx)
+                    save_stored_values(stored_values)
+                    st.rerun()
 
 if __name__ == "__main__":
     main()
