@@ -1,3 +1,5 @@
+# Version 1.0.0 - UTM Generator for Keboola
+# Version 1.0.0 - UTM Generator for Keboola
 import streamlit as st
 import json
 from urllib.parse import urlparse, urlencode
