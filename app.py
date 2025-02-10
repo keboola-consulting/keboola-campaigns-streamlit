@@ -94,38 +94,8 @@ def load_stored_values():
 def save_stored_values(values):
     st.session_state['stored_values'] = json.dumps(values)
 
-def copy_to_clipboard(text):
-    """Safely copy text to clipboard using session state."""
-    # Escape special characters for JavaScript
-    escaped_text = text.replace("'", "\\'").replace("\n", "\\n")
-    st.session_state['clipboard'] = escaped_text
-    return True
-
 def main():
     st.set_page_config(page_title="Naming Convention and UTM Generator", layout="wide")
-    
-    # Add JavaScript for clipboard functionality
-    st.markdown("""
-        <script>
-        const copyToClipboard = async (text) => {
-            try {
-                await navigator.clipboard.writeText(text);
-                console.log('Text copied to clipboard');
-            } catch (err) {
-                console.error('Failed to copy text: ', err);
-            }
-        };
-        </script>
-    """, unsafe_allow_html=True)
-    
-    # Handle clipboard operations
-    if 'clipboard' in st.session_state:
-        st.markdown(f"""
-            <script>
-                copyToClipboard('{st.session_state.clipboard}');
-            </script>
-        """, unsafe_allow_html=True)
-        del st.session_state['clipboard']
     
     st.title("Naming Convention and UTM Generator")
     st.write("Generate and store Salesforce Campaign Names and UTM URLs")
@@ -184,12 +154,6 @@ def main():
                 )
                 st.session_state['generated_campaign_name'] = sf_campaign_name
                 st.code(sf_campaign_name)
-                # Create a container for the copy button
-                col1, col2 = st.columns([3, 1])
-                with col2:
-                    if st.button("📋 Copy", key="copy_campaign_name"):
-                        st.write("Copied! ✅")
-                        st.session_state['clipboard'] = sf_campaign_name
     
     with tab2:
         existing_campaign_name = st.text_input(
@@ -229,15 +193,7 @@ def main():
             generated_url = generate_utm_url(destination_link, utm_params)
             if generated_url:
                 st.session_state['generated_url'] = generated_url
-                # Display URL in a container with copy button
-                url_container = st.container()
-                with url_container:
-                    st.code(generated_url)
-                    col1, col2 = st.columns([3, 1])
-                    with col2:
-                        if st.button("📋 Copy URL"):
-                            st.write("Copied! ✅")
-                            st.session_state['clipboard'] = generated_url
+                st.code(generated_url)
                 
                 # Save functionality
                 if st.session_state.get('generated_campaign_name'):
@@ -260,22 +216,10 @@ def main():
             for idx, value in enumerate(stored_values):
                 with st.expander(f"Campaign {idx + 1}"):
                     st.write("**Campaign Name:**")
-                    col1, col2 = st.columns([3, 1])
-                    with col1:
-                        st.code(value['campaignName'])
-                    with col2:
-                        if st.button("📋 Copy", key=f"copy_campaign_{idx}"):
-                            st.write("Copied! ✅")
-                            st.session_state['clipboard'] = value['campaignName']
+                    st.code(value['campaignName'])
                     
                     st.write("**Generated URL:**")
-                    col1, col2 = st.columns([3, 1])
-                    with col1:
-                        st.code(value['url'])
-                    with col2:
-                        if st.button("📋 Copy URL", key=f"copy_url_{idx}"):
-                            st.write("Copied! ✅")
-                            st.session_state['clipboard'] = value['url']
+                    st.code(value['url'])
                     
                     if st.button("🗑️ Remove", key=f"remove_{idx}"):
                         stored_values.pop(idx)
