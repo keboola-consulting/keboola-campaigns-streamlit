@@ -197,16 +197,24 @@ def main():
                 
                 # Save functionality
                 if st.session_state.get('generated_campaign_name'):
-                    if st.button("💾 Save Generated Values"):
-                        stored_values = load_stored_values()
-                        new_value = {
-                            'id': str(len(stored_values)),
-                            'campaignName': st.session_state['generated_campaign_name'],
-                            'url': generated_url
-                        }
-                        stored_values.append(new_value)
-                        save_stored_values(stored_values)
-                        st.success("Values saved successfully!")
+                    # Move the button outside the if block to prevent nested buttons
+                    st.session_state['show_save_button'] = True
+
+    # Move save button outside the Generate URL block
+    if st.session_state.get('show_save_button', False):
+        if st.button("💾 Save Generated Values", key="save_button"):
+            stored_values = load_stored_values()
+            new_value = {
+                'id': str(len(stored_values)),
+                'campaignName': st.session_state['generated_campaign_name'],
+                'url': st.session_state['generated_url']
+            }
+            stored_values.append(new_value)
+            save_stored_values(stored_values)
+            st.success("Values saved successfully!")
+            # Reset the save button state
+            st.session_state['show_save_button'] = False
+            st.rerun()
     
     # Stored Values Section
     st.divider()
